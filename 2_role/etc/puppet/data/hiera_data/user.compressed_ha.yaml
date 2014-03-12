@@ -1,0 +1,119 @@
+#
+# Parameters specified here are generally specific to the compressed_ha
+# scenario and will override any parameters of the same name that
+# are found in user.common.yaml.
+#
+
+swift_storage_netmask: 255.255.255.0
+swift_proxy_net_ip: "%{ipaddress_eth0}"
+swift_local_net_ip: "%{ipaddress_eth0_222}"
+
+# Enable or disable swift haproxy configuration
+openstack-ha::load-balancer::swift_enabled: true
+
+nova::compute::vncserver_proxyclient_address: "%{ipaddress_eth0}"
+
+# Most password are set in user.common.yaml.  These
+# are changes or additional passwords used in the compressed_ha
+# scenario.
+metadata_shared_secret: false
+galera::server::wsrep_sst_password: wsrep_password
+galera::monitor::monitor_password: monitor_pass
+glance::backend::swift::swift_store_key: swift_pass
+
+# In the compressed_ha scenario, Rabbit will be deployed with
+# mirroring and clustering.
+rabbitmq::server::config_mirrored_queues: true
+rabbitmq::server::config_cluster: true
+
+# The IP address on which Rabbit should listen.
+rabbitmq::server::node_ip_address: "%{ipaddress_eth0}"
+
+# In the compressed_ha scenario, we use Ceph RBD as the backend
+# storage for both Glance and Cinder by default.
+cinder_backend: rbd
+glance_backend: rbd
+
+#
+# HA connections
+#
+
+# The short hostname of each of the control nodes.  You will need
+# a minimum of 3 controller nodes to achieve high availability.
+controller_names:
+  - node01
+  - node02
+  - node03
+
+# The IP addresses of each controller that HAProxy should front-end.
+openstack-ha::load-balancer::controller_ipaddresses:
+  - 192.168.255.191
+  - 192.168.255.195
+  - 192.168.255.197
+
+# controller_vrid sets the VRID of the VRRP router used for HA of OpenStack
+# control services. Change this if the default value conflicts with
+# existing VRRP groups in your environment.
+openstack-ha::load-balancer::controller_vrid: '50'
+
+# The short hostnames of the Swift proxy servers that HAProxy should
+# front-end.
+openstack-ha::load-balancer::swift_proxy_names:
+  - node01
+  - node02
+  - node03
+
+# The IP addresses of the Swift proxy servers that HAProxy should
+# front-end.
+openstack-ha::load-balancer::swift_proxy_ipaddresses:
+  - 192.168.255.191
+  - 192.168.255.195
+  - 192.168.255.197
+
+# swift_vrid sets the VRID of the VRRP router used for HA of Swift
+# services. Change this if the default value conflicts with existing
+# VRRP groups in your environment.
+openstack-ha::load-balancer::swift_vrid: '51'
+
+# The ipaddresses and port numbners of the memcached instances
+# that will front-end nova services.
+nova::memcached_servers:
+  - 192.168.255.191:11211
+  - 192.168.255.195:11211
+  - 192.168.255.197:11211
+
+# The ipaddresses and port numbers of the memcached instances
+# that will front-end Swift services.
+openstack::swift::proxy::swift_memcache_servers:
+  - 192.168.255.191:11211
+  - 192.168.255.195:11211
+  - 192.168.255.197:11211
+
+# The short hostnames and port numbers of the hosts on which
+# RabbitMQ is running.
+rabbit_hosts:
+  - node01:5672
+  - node02:5672
+  - node03:5672
+
+# The address to whcih Horizon, Nova API, MySQL, and Galera should bind.
+bind_address: "%{ipaddress_eth0}"
+
+# The compressed_ha scenario uses provider networks to pass network
+# and allows the data center network to provide highly available
+# networking (e.g. via technologies such as VRRP).
+# This setting sets the vlan ranges to be used by the OVS plugin.
+neutron::plugins::ovs::network_vlan_ranges: physnet1:223:225
+
+# Swift can be configured to use a loopback volume or disks as storage
+# for volumes.  It is generally recommended to use 'disk' as 'loopback'
+# incurs a performance penalty.
+openstack::swift::storage-node::storage_type: disk
+
+# A list of the disks to be used for Swift storage on each node.
+openstack::swift::storage-node::storage_devices:
+  - 'sdb'
+  - 'sdc'
+  - 'sdd'
+  - 'sde'
+  - 'sdf'
