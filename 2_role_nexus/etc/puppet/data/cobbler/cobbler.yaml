@@ -1,0 +1,65 @@
+preseed:
+  repo: "http://openstack-repo.cisco.com/openstack/cisco havana main"
+
+profile:
+  name: "precise"
+  arch: "x86_64"
+  kopts: "log_port=514 \
+priority=critical \
+local=en_US \
+log_host=172.29.74.XX \
+netcfg/choose_interface=auto"
+
+node-global:
+  profile: "precise-x86_64"
+  power_type: "ipmitool"
+  power_user: "admin"
+  power_pass: "password"
+  kickstart: "/etc/cobbler/preseed/cisco-preseed"
+  kopts: "netcfg/get_nameservers=172.29.74.XX \
+netcfg/confirm_static=true \
+netcfg/get_ipaddress={$eth0_ip-address} \
+netcfg/get_gateway=172.29.74.XX \
+netcfg/disable_autoconfig=true \
+netcfg/dhcp_options=\"Configure network manually\" \
+netcfg/no_default_route=false\
+partman-auto/disk=/dev/sda \
+netcfg/get_netmask=255.255.255.224 \
+netcfg/dhcp_failed=true"
+
+# By default new nodes added to cobbler are set to PXE boot
+# automatically into the Ubuntu installer. Once the install completes
+# successfully, Cobbler will disable PXE booting into the installer
+# for that node.
+#
+# You can override this automatic behavior on a per-node basis, as
+# in the commented-out example for the build server below:
+# netboot_enabled: "0"
+# will tell Cobbler to not PXE boot install the server.
+# netboot_enabled: "1"
+# will tell Cobbler to PXE boot install the server at every boot.
+# If present in the node definition, the netboot_enabled parameter is
+# applied for that node on every Puppet run on the build server. If not
+# present for a node, Puppet runs on the build server will not change
+# whatever existing value is currently set in Cobbler for that node.
+#
+
+control-server:
+  hostname: "control-server"
+  power_address: "172.29.74.XXX"
+  interfaces:
+    eth0:
+      mac-address: "aa:aa:aa:aa:aa:aa"
+      dns-name: "control-server.ctocllab.cisco.com"
+      ip-address: "172.29.74.XXX"
+      static: "0"
+      
+compute-server01:
+  hostname: "compute-server01.ctocllab.cisco.com"
+  power_address: "172.29.74.XXX"
+  interfaces:
+    eth0:
+      mac-address: "aa:aa:aa:aa:aa:aa"
+      dns-name: "compute-server01.ctocllab.cisco.com"
+      ip-address: "172.29.74.XXX"
+      static: "0"

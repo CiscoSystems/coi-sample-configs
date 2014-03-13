@@ -1,0 +1,24 @@
+#
+# scenario for all_one
+#
+roles:
+  all_in_one:
+    classes:
+      - coe::base
+      - naginator::compute_target
+      - cinder::setup_test_volume
+      - openstack::swift::proxy
+      - openstack::swift::storage-node
+    class_groups:
+      - build
+      - controller
+      - compute
+      - network_controller
+      - test_file
+  compute:
+    classes:
+      - coe::base
+      - naginator::compute_target
+      - cinder::setup_test_volume
+    class_groups:
+      - compute
