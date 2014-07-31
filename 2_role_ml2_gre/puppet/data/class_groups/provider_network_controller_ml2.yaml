@@ -1,0 +1,4 @@
+classes:
+  - "%{network_service}"
+  - "%{network_service}::agents::dhcp"
+  - "%{network_service}::agents::ml2::%{network_plugin}"
