@@ -1,0 +1,42 @@
+control-server: controller
+control-server01: controller
+control-server02: controller
+control-server03: controller
+control01: controller_without_mon
+control02: controller_without_mon
+control03: controller_without_mon
+
+compute-server: compute
+#compute-server01: compute
+#compute-server02: compute
+#compute-server03: compute
+compute-server01: compute_without_osd
+compute-server02: compute_without_osd
+compute-server03: compute_without_osd
+
+all-in-one: all_in_one
+
+build-server: build
+buildpub3-1404: build
+
+cache: cache
+
+load-balancer01: load_balancer
+load-balancer02: load_balancer
+
+swift-proxy01: swift_proxy
+swift-proxy02: swift_proxy
+
+swift-storage01: swift_storage
+swift-storage02: swift_storage
+swift-storage03: swift_storage
+
+#Stacktira roles
+build.+: build
+compute.+: compute
+control.+: control
+
+#compressed_ha
+node01: compressed_ha
+node02: compressed_ha
+node03: compressed_ha

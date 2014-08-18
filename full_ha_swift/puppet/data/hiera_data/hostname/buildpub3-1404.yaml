@@ -1,0 +1,13 @@
+# set my puppet_master_address to be fqdn
+puppet_master_address: "%{fqdn}"
+cobbler_node_ip: '172.29.XX.XXX'
+node_subnet: '172.29.XX.XXX'
+node_netmask: '255.255.255.224'
+node_gateway: '172.29.XX.XXX'
+admin_user: localadmin
+password_crypted: $6$UfgWxrIv$k4KfzAEMqMg.fppmSOTd0usI4j6gfjs0962.JXsoJRWa5wMz8yQk4SfInn4.WZ3L/MCt5u.62tHDGB36EhiKF1
+autostart_puppet: false
+ucsm_port: 443
+install_drive: /dev/vda
+#ipv6_ra: 1
+#interface_bonding = 'true'

@@ -1,0 +1,4 @@
+openstack::swift::storage-node::swift_zone: 2
+coe::network::interface::interface_name: "p4p2"
+coe::network::interface::ipaddress: "172.29.XX.XXX"
+coe::network::interface::netmask: "255.255.255.240"

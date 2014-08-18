@@ -1,0 +1,253 @@
+preseed:
+  repo: "http://openstack-repo.cisco.com/openstack/cisco havana main"
+
+profile:
+  name: "trusty"
+  arch: "x86_64"
+  kopts: "log_port=514 \
+priority=critical \
+local=en_US \
+log_host=172.29.XX.XXX \
+netcfg/choose_interface=auto"
+
+profile:
+  name: "precise"
+  arch: "x86_64"
+  kopts: "log_port=514 \
+priority=critical \
+local=en_US \
+log_host=172.29.XX.XXX \
+netcfg/choose_interface=auto"
+
+node-global:
+  #power_type should be ipmilan for CIMC, or ucs for UCS-M
+  power_type: "ipmilan"
+  power_user: "admin"
+  power_pass: "password"
+  kickstart: "/etc/cobbler/preseed/cisco-preseed"
+  kopts: "netcfg/get_nameservers=172.29.XX.XXX \
+netcfg/confirm_static=true \
+netcfg/get_ipaddress={$p4p1_ip-address} \
+netcfg/get_gateway=172.29.XX.XXX \
+netcfg/disable_autoconfig=true \
+netcfg/dhcp_options=\"Configure network manually\" \
+netcfg/no_default_route=false\
+partman-auto/disk=/dev/sda \
+netcfg/get_netmask=255.255.255.224 \
+netcfg/dhcp_failed=true"
+
+# By default new nodes added to cobbler are set to PXE boot
+# automatically into the Ubuntu installer. Once the install completes
+# successfully, Cobbler will disable PXE booting into the installer
+# for that node.
+#
+# You can override this automatic behavior on a per-node basis, as
+# in the commented-out example for the build server below:
+# netboot_enabled: "0"
+# will tell Cobbler to not PXE boot install the server.
+# netboot_enabled: "1"
+# will tell Cobbler to PXE boot install the server at every boot.
+# If present in the node definition, the netboot_enabled parameter is
+# applied for that node on every Puppet run on the build server. If not
+# present for a node, Puppet runs on the build server will not change
+# whatever existing value is currently set in Cobbler for that node.
+#
+
+build-server:
+  hostname: "build-server.cisco.com"
+  # by default new added nodes are set to PXE boot
+  # uncomment this line to force the added node to not PXE boot
+  #netboot_enabled: "0"
+  #
+  # power_address is the CIMC or UCS-M instance managing the server
+  # For UCS-M installations using suborganizations, specify the
+  # suborg after the address, such as:
+  #   power_address: "192.168.2.101:org-CI"
+  power_address: "192.168.2.101"
+  # For UCS-M, a power_id argument is also needed specifying the profile
+  # name of the instance in UCS-M
+  # power_id: "Build-Server.C1B2"
+  profile: "trusty-x86_64"
+  interfaces:
+    eth0:
+      mac-address: "a1:bb:cc:dd:ee:ff"
+      dns-name: "build-server.cisco.com"
+      ip-address: "192.168.242.101"
+      static: "0"
+
+load-balancer01:
+  hostname: "load-balancer01.ctocllab.cisco.com"
+  power_address: "172.29.XX.XXX"
+  profile: "trusty-x86_64"
+  interfaces:
+    p4p1:
+      mac-address: "AA:AA:AA:AA:AA:AA"
+      dns-name: "load-balancer01.ctocllab.cisco.com"
+      ip-address: "172.29.XX.XXX"
+      static: "0"
+
+load-balancer02:
+  hostname: "load-balancer02.ctocllab.cisco.com"
+  power_address: "172.29.XX.XXX"
+  profile: "trusty-x86_64"
+  interfaces:
+    p4p1:
+      mac-address: "AA:AA:AA:AA:AA:AA"
+      dns-name: "load-balancer02.ctocllab.cisco.com"
+      ip-address: "172.29.XX.XXX"
+      static: "0"
+      
+swift-proxy01:
+  hostname: "swift-proxy01.ctocllab.cisco.com"
+  power_address: "172.29.XX.XXX"
+  profile: "trusty-x86_64"
+  interfaces:
+    p4p1:
+      mac-address: "AA:AA:AA:AA:AA:AA"
+      dns-name: "swift-proxy01.ctocllab.cisco.com"
+      ip-address: "172.29.XX.XXX"
+      static: "0"      
+      
+swift-proxy02:
+  hostname: "swift-proxy02.ctocllab.cisco.com"
+  power_address: "172.29.XX.XXX"
+  profile: "trusty-x86_64"
+  interfaces:
+    p4p1:
+      mac-address: "AA:AA:AA:AA:AA:AA"
+      dns-name: "swift-proxy02.ctocllab.cisco.com"
+      ip-address: "172.29.XX.XXX"
+      static: "0" 
+      
+swift-storage01:
+  hostname: "swift-storage01.ctocllab.cisco.com"
+  power_address: "172.29.XX.XXX"
+  profile: "trusty-x86_64"
+  interfaces:
+    p4p1:
+      mac-address: "AA:AA:AA:AA:AA:AA"
+      dns-name: "swift-storage01.ctocllab.cisco.com"
+      ip-address: "172.29.XX.XXX"
+      static: "0"           
+
+swift-storage02:
+  hostname: "swift-storage02.ctocllab.cisco.com"
+  power_address: "172.29.XX.XXX"
+  profile: "trusty-x86_64"
+  interfaces:
+    p4p1:
+      mac-address: "AA:AA:AA:AA:AA:AA"
+      dns-name: "swift-storage02.ctocllab.cisco.com"
+      ip-address: "172.29.XX.XXX"
+      static: "0" 
+
+swift-storage03:
+  hostname: "swift-storage03.ctocllab.cisco.com"
+  power_address: "172.29.XX.XXX"
+  profile: "trusty-x86_64"
+  interfaces:
+    p4p1:
+      mac-address: "AA:AA:AA:AA:AA:AA"
+      dns-name: "swift-storage03.ctocllab.cisco.com"
+      ip-address: "172.29.XX.XXX"
+      static: "0"       
+
+control-server:
+  hostname: "control-server.ctocllab.cisco.com"
+  power_address: "192.168.2.109"
+  profile: "trusty-x86_64"
+  interfaces:
+    eth0:
+      mac-address: "aa:bb:c2:dd:ee:ff"
+      dns-name: "control-server.cisco.com"
+      ip-address: "192.168.242.109"
+      static: "0"
+      
+control01:
+  hostname: "control01.ctocllab.cisco.com"
+  power_address: "172.29.XX.XXX"
+  profile: "trusty-x86_64"
+  interfaces:
+    p4p1:
+      mac-address: "AA:AA:AA:AA:AA:AA"
+      dns-name: "control01.ctocllab.cisco.com"
+      ip-address: "172.29.XX.XXX"
+      static: "0" 
+
+control02:
+  hostname: "control02.ctocllab.cisco.com"
+  power_address: "172.29.XX.XXX"
+  profile: "trusty-x86_64"
+  interfaces:
+    p4p1:
+      mac-address: "AA:AA:AA:AA:AA:AA"
+      dns-name: "control02.ctocllab.cisco.com"
+      ip-address: "172.29.XX.XXX"
+      static: "0"
+      
+control03:
+  hostname: "control03.ctocllab.cisco.com"
+  power_address: "172.29.XX.XXX"
+  profile: "trusty-x86_64"
+  interfaces:
+    p4p1:
+      mac-address: "AA:AA:AA:AA:AA:AA"
+      dns-name: "control03.ctocllab.cisco.com"
+      ip-address: "172.29.XX.XXX"
+      static: "0"
+
+           
+compute-server:
+  hostname: "compute-server.cisco.com"
+  power_address: "192.168.2.113"
+  profile: "trusty-x86_64"
+  interfaces:
+    eth0:
+      mac-address: "a3:bb:cc:dd:ee:ff"
+      dns-name: "compute-server.cisco.com"
+      ip-address: "192.168.242.113"
+      static: "0"
+      
+compute-server01:
+  hostname: "compute-server01.ctocllab.cisco.com"
+  power_address: "172.29.XX.XXX"
+  profile: "trusty-x86_64"
+  interfaces:
+    p4p1:
+      mac-address: "AA:AA:AA:AA:AA:AA"
+      dns-name: "compute-server01.ctocllab.cisco.com"
+      ip-address: "172.29.XX.XXX"
+      static: "0"
+      
+compute-server02:
+  hostname: "compute-server02.ctocllab.cisco.com"
+  power_address: "172.29.XX.XXX"
+  profile: "trusty-x86_64"
+  interfaces:
+    p4p1:
+      mac-address: "AA:AA:AA:AA:AA:AA"
+      dns-name: "compute-server02.ctocllab.cisco.com"
+      ip-address: "172.29.XX.XXX"
+      static: "0"      
+
+compute-server03:
+  hostname: "compute-server03.ctocllab.cisco.com"
+  power_address: "172.29.XX.XXX"
+  profile: "trusty-x86_64"
+  interfaces:
+    p4p1:
+      mac-address: "AA:AA:AA:AA:AA:AA"
+      dns-name: "compute-server03.ctocllab.cisco.com"
+      ip-address: "172.29.XX.XXX"
+      static: "0" 
+
+test-precise-aio:
+  hostname: "test-precise-aio.cisco.com"
+  power_address: "192.168.2.116"
+  profile: "precise-x86_64"
+  interfaces:
+    eth0:
+      mac-address: "aa:bb:cc:99:88:fe"
+      dns-name: "test-precise-aio.cisco.com"
+      ip-address: "192.168.242.118"
+      static: "0" 
