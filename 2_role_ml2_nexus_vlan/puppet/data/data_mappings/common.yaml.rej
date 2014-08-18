@@ -1,0 +1,13 @@
+--- data/data_mappings/common.yaml
++++ data/data_mappings/common.yaml
+@@ -407,7 +407,10 @@
+ #nexus_config:
+ #  - coe::nexus::nexus_config
+ # Uncomment this For ML2 and comment the coe line above
++#nexus_config:
+ #  - neutron::plugins::ml2::cisco::nexus::nexus_config
++#ml2_mechanism_drivers:
++#  - neutron::plugins::ml2::mechanism_drivers
+ 
+ # map time server for using during install by cobbler
+ cobbler_node_ip:

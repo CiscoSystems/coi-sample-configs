@@ -1,0 +1,60 @@
+preseed:
+  repo: "http://openstack-repo.cisco.com/openstack/cisco icehouse-proposed main"
+
+profile:
+  name: "trusty"
+  arch: "x86_64"
+  kopts: "log_port=514 \
+priority=critical \
+local=en_US \
+log_host=172.29.XX.XXX \
+netcfg/choose_interface=auto"
+
+profile:
+  name: "precise"
+  arch: "x86_64"
+  kopts: "log_port=514 \
+priority=critical \
+local=en_US \
+log_host=192.168.242.100 \
+netcfg/choose_interface=auto"
+
+node-global:
+  #power_type should be ipmilan for CIMC, or ucs for UCS-M
+  power_type: "ipmilan"
+  power_user: "admin"
+  power_pass: "password"
+  kickstart: "/etc/cobbler/preseed/cisco-preseed"
+  kopts: "netcfg/get_nameservers=172.29.XX.XXX \
+netcfg/confirm_static=true \
+netcfg/get_ipaddress={$p4p1_ip-address} \
+netcfg/get_gateway=172.29.XX.XXX \
+netcfg/disable_autoconfig=true \
+netcfg/dhcp_options=\"Configure network manually\" \
+netcfg/no_default_route=false \
+partman-auto/disk=/dev/sda \
+netcfg/get_netmask=255.255.255.224 \
+netcfg/dhcp_failed=true"
+
+
+control-server:
+  hostname: "control-server.ctocllab.cisco.com"
+  power_address: "172.29.XX.XXX"
+  profile: "trusty-x86_64"
+  interfaces:
+    p4p1:
+      mac-address: "AA:AA:AA:AA:AA:AA"
+      dns-name: "control-server.ctocllab.cisco.com"
+      ip-address: "172.29.XX.XXX"
+      static: "0"
+      
+compute-server01:
+  hostname: "compute-server01.ctocllab.cisco.com"
+  power_address: "172.29.XX.XXX"
+  profile: "trusty-x86_64"
+  interfaces:
+    p4p1:
+      mac-address: "AA:AA:AA:AA:AA:AA"
+      dns-name: "compute-server01.ctocllab.cisco.com"
+      ip-address: "172.29.XX.XXX"
+      static: "0"

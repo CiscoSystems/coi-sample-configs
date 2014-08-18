@@ -1,0 +1,16 @@
+--- data/hiera_data/tenant_network_type/vlan.yaml
++++ data/hiera_data/tenant_network_type/vlan.yaml
+@@ -5,6 +5,13 @@
+ neutron::agents::ovs::bridge_mappings:
+   - "physnet1:br-ex"
+ neutron::plugins::ovs::network_vlan_ranges: physnet1:1000:2000
++
++# For ML2, uncomment below line and comment out the above 
++#neutron::plugins::ml2::network_vlan_ranges: ['physnet1:75:76']
++# ML2 Agent
++#neutron::agents::ml2::ovs::bridge_mappings:
++#  - "default:br-ex"
++
+ quantum::plugins::ovs::tenant_network_type: vlan
+ neutron::plugins::ovs::tenant_network_type: vlan
+ quantum::agents::ovs::enable_tunneling: false

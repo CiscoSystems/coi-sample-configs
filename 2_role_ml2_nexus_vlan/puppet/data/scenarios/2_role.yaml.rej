@@ -1,0 +1,20 @@
+--- data/scenarios/2_role.yaml
++++ data/scenarios/2_role.yaml
+@@ -25,6 +25,8 @@
+       - heat_all
+       - "%{db_type}_database"
+       - network_controller
++# For ML2, Uncomment this and comment above line
++#      - network_controller_ml2
+       - test_file
+   compute:
+     classes:
+@@ -32,6 +34,8 @@
+       - cinder::setup_test_volume
+     class_groups:
+       - nova_compute
++# For ML2, Uncomment this and comment above line
++#      - nova_compute_ml2
+       - cinder_volume
+       - ceilometer_compute
+   swift_proxy:
